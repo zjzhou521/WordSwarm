@@ -1,3 +1,6 @@
+# MacOS DS File
+.DS_Store
+TwitterData/*
 .idea/*
 *.pyc
 /1-Preprocessing/*/*
