@@ -20,7 +20,7 @@ def print_docs(text):
 
 def print_matrix_int(m):  # dict{key, list}
     for key in m.keys():
-        print(key.ljust(12), end="")
+        print(key.ljust(20), end="")
         print(m[key])
     print("--------------------------------")
 
@@ -87,9 +87,9 @@ def stemming(doc):
 
 
 def preprocessing(docs):
-    print("####### preprocessing #######")
-    print("before:  ")
-    print_docs(docs)
+    # print("####### preprocessing #######")
+    # print("before:  ")
+    # print_docs(docs)
     docs_term_sequence = []
     for doc in docs:
         doc = remove_punctuation(doc)  # remove punctuation
@@ -98,23 +98,26 @@ def preprocessing(docs):
         doc = lemmatization(doc)  # lemmatization
         doc = stemming(doc)  # stemming
         docs_term_sequence.append(doc.split(" "))
-    print("after:  ")
-    print_docs(docs_term_sequence)
-    print("\n")
+    # print("after:  ")
+    # print_docs(docs_term_sequence)
+    # print("\n")
     return docs_term_sequence
 
-
-def get_term_document_matrix(docs_term_sequence):
-    print("####### term-document incidence matrix #######")
-    print("before:  ")
-    print_docs(docs_term_sequence)
-    # get all terms
+def get_term_list(docs_term_sequence):
     all_terms = []
     for doc_terms in docs_term_sequence:
         for term in doc_terms:
             if term not in all_terms:
                 all_terms.append(term)
     all_terms.sort()
+    return all_terms
+
+def get_term_document_matrix(docs_term_sequence):
+    # print("####### term-document incidence matrix #######")
+    # print("before:  ")
+    # print_docs(docs_term_sequence)
+    # get all terms
+    all_terms = get_term_list(docs_term_sequence)
     # get frequency each doc
     docs_frequency = []
     for doc_terms in docs_term_sequence:
@@ -132,14 +135,14 @@ def get_term_document_matrix(docs_term_sequence):
         for i in range(len(docs_frequency)):
             totalFreq += docs_frequency[i][term]
         term_doc_matrix[term] = totalFreq
-    print("after:  ")
-    print_matrix_int(term_doc_matrix)
-    print("\n")
+    # print("after:  ")
+    # print_matrix_int(term_doc_matrix)
+    # print("\n")
     return term_doc_matrix
 
 def readDate():
     tweets = []
-    totalDocs = ""
+    totalDocs = []
     attributes = ["Keywords", "TweetID", "AuthorID", "Hashtags", "Tweet Created at", "Tweet Text", "Likes", "Reply",
                   "Retweets", "Polarity"]
     for k in range(6):
@@ -149,13 +152,21 @@ def readDate():
             for j in range(len(attributes)):
                 curTweet.append(data[attributes[j]][i])
             tweets.append(curTweet)
-            totalDocs += curTweet[5]
+            totalDocs.append(curTweet[5])
     tweets.sort(key=lambda x: x[4])  # sort based on time
     return tweets, totalDocs
 
+
 # read in data
 tweets, totalDocs = readDate()
-print(len(tweets))  # 110900
+lenTweets = len(tweets)
+print(lenTweets)  # 110900
+
+# get all terms from totalDocs
+# docs_term_sequence = preprocessing(totalDocs)  # preprocess using: punctuation removal, stop word removal, case-folding, lemmatization, stemming
+# all_terms = get_term_list(docs_term_sequence) # get all terms
+# print(all_terms)
+# print(len(all_terms))
 
 # for every 30 min, get word frequency
 timeList = ["2022-01-27 22:30:00", "2022-02-23 04:00:00"]
@@ -173,7 +184,7 @@ while curTime < endTime:
     print(curTime)
     # get docs
     docs = []
-    while index < len(tweets):
+    while index < lenTweets:
         tweetTime = time.strptime(tweets[index][4][:19], "%Y-%m-%d %H:%M:%S")
         tweetTime = datetime.datetime(tweetTime[0], tweetTime[1], tweetTime[2], tweetTime[3], tweetTime[4],
                                       tweetTime[5])
@@ -184,6 +195,7 @@ while curTime < endTime:
     docs_term_sequence = preprocessing(docs)  # preprocess using: punctuation removal, stop word removal, case-folding, lemmatization, stemming
     term_doc_matrix = get_term_document_matrix(docs_term_sequence)  # get term-document incidence matrix
     cnt += 1
+    print()
     if cnt > 1000: break  # only display front 1000
 
 

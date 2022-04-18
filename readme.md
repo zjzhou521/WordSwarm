@@ -65,3 +65,7 @@ The following example describes how to create a WordSwarm using the AAAS Science
 	- This will create an output video file `wordSwarmOut.mp4`
 	
 Congratulations on creating your first WordSwarm!
+
+conda install -c conda-forge box2d-py
+pip3 install pygame
+pip install ngram
