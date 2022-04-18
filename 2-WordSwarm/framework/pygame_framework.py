@@ -82,8 +82,10 @@ class PygameDraw(b2DrawExtended):
     """
     surface = None
     axisScale = 10.0
-    def __init__(self, **kwargs): 
+    def __init__(self, a, **kwargs): 
         b2DrawExtended.__init__(self, **kwargs)
+        # b2DrawExtended.__init__(self)
+        self.test = a
         self.flipX = False
         self.flipY = True
         self.convertVertices = True
@@ -238,7 +240,7 @@ class PygameFramework(FrameworkBase):
         self.screen = pygame.display.set_mode((1920,1080))
         self.screenSize = b2Vec2(*self.screen.get_size())
 
-        self.renderer = PygameDraw(surface=self.screen, test=self)
+        self.renderer = PygameDraw(self, surface=self.screen)
         self.world.renderer=self.renderer
         
         try:

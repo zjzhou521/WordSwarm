@@ -110,7 +110,7 @@ class WordSwarm (Framework):
 	wordObjs = []
 	sun = []
 	wordHue = (-1, -1)
-	topN = sys.maxint
+	topN = sys.maxsize
 	
 	# Size of words (m)
 	maxSize = 5
@@ -133,15 +133,15 @@ class WordSwarm (Framework):
 			opts, args = getopt.getopt(argv,
 					"hst:i:d:m:c:b:e:n:",["ifile="])
 		except getopt.GetoptError:
-			print 'Invalid argument'
+			print ('Invalid argument')
 			print(argv)
 			print('try:')
-			print 'wordSwarm.py -n <topN] -s -t <title> -i <inputfile> -d <outputFolder> -m <maxWordHeight> -c <HexHue1_HexHue2> -b <startDate YYYYMMDD> -e <endDate YYYYMMDD>'
+			print ('wordSwarm.py -n <topN] -s -t <title> -i <inputfile> -d <outputFolder> -m <maxWordHeight> -c <HexHue1_HexHue2> -b <startDate YYYYMMDD> -e <endDate YYYYMMDD>')
 			sys.exit(2)
 			
 		for opt, arg in opts:
 			if opt == '-h':
-				print 'wordSwarm.py -n <topN] -s -t <title> -i <inputfile> -d <outputFolder> -m <maxWordHeight> -c <HexHue1_HexHue2> -b <startDate YYYYMMDD> -e <endDate YYYYMMDD>'
+				print ('wordSwarm.py -n <topN] -s -t <title> -i <inputfile> -d <outputFolder> -m <maxWordHeight> -c <HexHue1_HexHue2> -b <startDate YYYYMMDD> -e <endDate YYYYMMDD>')
 				sys.exit()
 			elif opt in ("-i", "--ifile"):
 			
