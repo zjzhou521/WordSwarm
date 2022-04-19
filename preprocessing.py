@@ -154,6 +154,10 @@ def readData():
             curTweet = []
             for j in range(len(attributes)):
                 curTweet.append(data[attributes[j]][i])
+            curTweetText = curTweet[5]
+            # if it is one character / pure number, skip
+            if len(curTweetText) <= 1: continue
+            if curTweetText.isdigit(): continue
             tweets.append(curTweet)
             doc = curTweet[5]
             totalDocs.append(doc)
@@ -179,7 +183,7 @@ def getWordTimeList():
     while curTime < endTime:
         cnt += 1
         # need tweets from [index, curTime)
-        curTime += datetime.timedelta(minutes=30)
+        curTime += datetime.timedelta(hours=2)
         wordTimeList.append(curTime)
     return wordTimeList
 def createKeywordCSV(keywords):
@@ -195,11 +199,12 @@ def createKeywordCSV(keywords):
 # read in data
 tweets, totalDocs, keyword_tweets = readData()
 lenTweets = len(tweets)
-# print(lenTweets)  # 110900
+print("tweets list len = ", lenTweets)  # 110900
 # print(len(keyword_tweets))  # 29
 
 # generate wordTimeList
-wordTimeList = getWordTimeList()  # len = 1259
+wordTimeList = getWordTimeList()  # len = 315
+print("time list len = ", len(wordTimeList))
 # createKeywordCSV(keyword_tweets.keys()) # create csv file based on keyword
 
 # for each keyword
@@ -215,6 +220,10 @@ for keyword in keyword_tweets.keys():
     for doc_terms in docs_term_sequence:
         for term in doc_terms:
             if term not in terms_times.keys():
+                # if it is one character / pure number / web link, skip
+                if len(term) <= 1: continue
+                if term.isdigit(): continue
+                if "http" in term or "www" in term or ".co" in term: continue
                 terms_times[term] = []
     # for every 30 min, get word frequency
     index = 0
